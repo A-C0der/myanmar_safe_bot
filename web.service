@@ -1,0 +1,8 @@
+[Unit]
+Description=Threat Intell Service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /project/myanmar_safe_bot/backend.py
+[Install]
+WantedBy=A-coder
