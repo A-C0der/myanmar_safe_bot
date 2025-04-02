@@ -34,7 +34,7 @@ class BotMyanmar:
         self.send_message(chat_id, "Mandalay options:", buttons)
 
     def data_return(self,location):
-        conn = sql.connect("earthdb.db")
+        conn = sql.connect("/project/myanmar_safe_bot/earthdb.db")
         cursor = conn.cursor()
         cursor.execute(f"SELECT name,phone,location,date FROM {location}")
         rows = cursor.fetchall()

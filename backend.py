@@ -2,7 +2,7 @@ import sqlite3
 from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
-DATABASE = "earthdb.db"
+DATABASE = "/project/myanmar_safe_bot/earthdb.db"
 # Home Page - Display mdysafe
 
 @app.route("/")
