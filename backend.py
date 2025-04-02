@@ -60,5 +60,59 @@ def delete(user_id):
     conn.close()
     return redirect(url_for("home"))
 
+
+##mdyfood
+@app.route("/mdydonate")
+def home_mdy():
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM mdydonate")
+    users = cursor.fetchall()
+    conn.close()
+    return render_template("mdy_food.html", users=users)
+
+@app.route("/submitmd", methods=["POST"])
+def submitmd():
+    name = request.form["name"]
+    phone = request.form["phone"]
+    location = request.form["location"]
+    date = request.form["date"]
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO mdydonate (name, phone, location,date) VALUES (?, ?, ?,?)", (name, phone, location,date))
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for("home_mdy"))
+
+@app.route("/mdydonate/delete/<int:user_id>")
+def deletemdy(user_id):
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM mdydonate WHERE id=?", (user_id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for("home_mdy"))
+
+@app.route("/mdydonate/edit/<int:user_id>", methods=["GET", "POST"])
+def editmdy(user_id):
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+
+    if request.method == "POST":
+        name = request.form["name"]
+        phone = request.form["phone"]
+        location = request.form["location"]
+        date = request.form["date"]
+        cursor.execute("UPDATE mdydonate SET name=?, phone=?, location=?,date=?  WHERE id=?", (name, phone, location,date, user_id))
+        conn.commit()
+        conn.close()
+        return redirect(url_for("home_mdy"))
+
+    cursor.execute("SELECT * FROM mdydonate WHERE id=?", (user_id,))
+    user = cursor.fetchone()
+    conn.close()
+    return render_template("mdy_food_edit.html", user=user)
+
 if __name__ == "__main__":
     app.run(debug=True)
