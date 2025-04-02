@@ -18,12 +18,30 @@ class BotMyanmar:
     def send_message(self, chat_id, text, buttons=None):
         """Send a message with optional inline buttons"""
         url = f"{self.url}/sendMessage"
-        for tt in text:
-            data = {"chat_id": chat_id, "text": tt}
+        
+        # data={
+        #         'chat_id':chat_id,
+        #         'text':'hello'
+        #     }  
+       
+       
+        data = {"chat_id": chat_id}
+        
+        if type(text)==str:
+            data = {"chat_id": chat_id, "text":text}
             if buttons:
                 data["reply_markup"] = buttons
-            requests.post(url, json=data)
+            
+            requests.post(url,json=data)
+        if type(text)==list:
+            for i in text:
+                data["text"] = i
+                if buttons:
+                    data["reply_markup"] = buttons
+                requests.post(url, json=data)
 
+        
+        
     def mandalay(self, chat_id):
         """Handle Mandalay button click"""
         buttons = {
@@ -39,11 +57,11 @@ class BotMyanmar:
         cursor = conn.cursor()
         cursor.execute(f"SELECT name,phone,location,date FROM {location}")
         rows = cursor.fetchall()
-        dt = []
+        dt =[]
         for data in rows:
-            
             dt.append(f' Name: {data[0]}, Phone: {data[1]},Location: {data[2]}, Date: {data[3]}\n\n')
         return dt
+            
            
     def handle_callback(self, callback_query):
         """Process button clicks"""
@@ -74,7 +92,7 @@ class BotMyanmar:
                     if "message" in update and "text" in update["message"]:
                         chat_id = update["message"]["chat"]["id"]
                         if update["message"]["text"] == "/start":
-                            self.send_message(chat_id, "Choose a location:", {
+                            self.send_message(chat_id, "Select Location:", {
                                 "inline_keyboard": [
                                     [{"text": "မန္တလေး", "callback_data": "mandalay"}],
                                     [{"text": "စစ်ကိုင်း", "callback_data": "sagaing"}],
@@ -83,10 +101,10 @@ class BotMyanmar:
                                 ]
                             })
                         
-                        if update["message"]["text"] == "MDY FOOD" or update["message"]["text"] == "mdy food" or update["message"]["text"]=="MDY DONATE" or update["message"]["text"]=="mdy donate":
+                        elif update["message"]["text"] == "MDY FOOD" or update["message"]["text"] == "mdy food" or update["message"]["text"]=="MDY DONATE" or update["message"]["text"]=="mdy donate":
                              self.send_message(chat_id,self.data_return('mdydonate'))
 
-                        if update["message"]["text"] == "mdy rescue" or update["message"]["text"] == "MDY RESCUE" or update["message"]["text"]=="MDY SAFE" or update["message"]["text"]=="mdy safe":
+                        elif update["message"]["text"] == "mdy rescue" or update["message"]["text"] == "MDY RESCUE" or update["message"]["text"]=="MDY SAFE" or update["message"]["text"]=="mdy safe":
                              self.send_message(chat_id,self.data_return('mdysafe'))
                     elif "callback_query" in update:
                         self.handle_callback(update["callback_query"])
