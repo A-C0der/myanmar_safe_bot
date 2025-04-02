@@ -2,6 +2,7 @@ import requests
 import time
 import json as js
 import pandas as pd
+import sqlite3 as sql
 class BotMyanmar:
     def __init__(self):
         self.token = "7586848193:AAEFsTAZwvua5YQdziZuSF174EMEQzyzkrc"  # Replace with your bot token
@@ -32,13 +33,13 @@ class BotMyanmar:
         }
         self.send_message(chat_id, "Mandalay options:", buttons)
 
-    def data_return(self,file):
-        with open(file,"r") as mdr:
-            data = js.load(mdr)
-            df = pd.DataFrame(data)
-            for index, row in df.iterrows():
-                return f"Name: {row.get('rescue_name','Not Show')}\nLocation: {row.get('location')}\n Phone:{row.get('phone')}\n\n"
-
+    def data_return(self,location):
+        conn = sql.connect("earthdb.db")
+        cursor = conn.cursor()
+        cursor.execute(f"SELECT name,phone,location,date FROM {location}")
+        rows = cursor.fetchall()
+        for data in rows:
+            return f'Name: {data[0]}, Phone: {data[1]},Location: {data[2]}, Date: {data[3]}\n\n'
     def handle_callback(self, callback_query):
         """Process button clicks"""
         query_id = callback_query["id"]
@@ -48,9 +49,9 @@ class BotMyanmar:
         if data == "mandalay":
             self.mandalay(chat_id)
         elif data == "mdy_rescue":
-            self.send_message(chat_id,self.data_return('mdy_resuce_data.json'))  # Send "MDY RESCUE" when clicked
+            self.send_message(chat_id,self.data_return('mdysafe'))  # Send "MDY RESCUE" when clicked
         elif data == "food_donation":
-            self.send_message(chat_id, "You selected: 'အစားအသောက်ဆေး၀ါးအလှူ'")
+            self.send_message(chat_id,self.data_return('mdy_food.json'))
         else:
             self.send_message(chat_id, "Unknown option.")
 

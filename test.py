@@ -1,12 +1,27 @@
-import json as jr
-import pandas as pd
+import sqlite3 as sql
+conn = sql.connect("earthdb.db")
+cursor = conn.cursor()
+# Create table
+# cursor.execute('''
+#     CREATE TABLE IF NOT EXISTS mdysafe (
+#         id INTEGER PRIMARY KEY AUTOINCREMENT,
+#         name TEXT NOT NULL,
+#         phone CHAR,
+#         location CHAR,
+#         date CHAR
+        
+#     )
+# ''')
 
-with open("mdy_resuce_data.json", "r") as mdr:
-    data = jr.load(mdr)
+data = ( "Test1", '088484', "mdy",'18.05.2024-2025')
 
-# Convert JSON data into a DataFrame
-df = pd.DataFrame(data)
+# Insert query
+cursor.execute('''
+    INSERT INTO mdysafe(name, phone, location,date) 
+    VALUES (?, ?, ?, ?)
+''', data)
 
-# Print each row in the desired format
-for index, row in df.iterrows():
-    print(f"Name: {row.get('name', 'N/A')}, Location: {row.get('location', 'N/A')}, Phone: {row.get('phone', 'N/A')}")
+# Commit and close the connection
+conn.commit()
+conn.close()
+print("Table created successfully!")

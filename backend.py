@@ -1,56 +1,64 @@
-from flask import Flask, render_template, request, redirect, jsonify
-import json
-import os
+import sqlite3
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
-
-JSON_FILE = "mdy_resuce_data.json"
-
-# Load JSON data
-def load_data():
-    if os.path.exists(JSON_FILE):
-        with open(JSON_FILE, "r") as file:
-            try:
-                return json.load(file)
-            except json.JSONDecodeError:
-                return []
-    return []
-
-# Save JSON data
-def save_data(data):
-    with open(JSON_FILE, "w") as file:
-        json.dump(data, file, indent=4)
+DATABASE = "earthdb.db"
+# Home Page - Display mdysafe
 
 @app.route("/")
 def home():
-    users = load_data()
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM mdysafe")
+    users = cursor.fetchall()
+    conn.close()
     return render_template("index.html", users=users)
 
-
-
+# Create User (Insert)
 @app.route("/submit", methods=["POST"])
 def submit():
     name = request.form["name"]
     phone = request.form["phone"]
     location = request.form["location"]
+    date = request.form["date"]
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO mdysafe (name, phone, location,date) VALUES (?, ?, ?,?)", (name, phone, location,date))
+    conn.commit()
+    conn.close()
 
-    
-    new_entry = {"name": name, "phone": phone, "location": location}
+    return redirect(url_for("home"))
 
-    
-    with open("mdy_resuce_data.json","r+") as hs:
-            data = json.load(hs)
-                
-            data['rescue_name'].insert(0,name)
-            data['location'].insert(0,phone)
-            data['phone'].insert(0,location)
-            hs.seek(0)
-            json.dump(data,hs,indent=4)
-    return redirect("/")
+# Update User (Edit)
+@app.route("/edit/<int:user_id>", methods=["GET", "POST"])
+def edit(user_id):
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
 
-@app.route("/api/users", methods=["GET"])
-def api_users():
-    return jsonify(load_data())
+    if request.method == "POST":
+        name = request.form["name"]
+        phone = request.form["phone"]
+        location = request.form["location"]
+        date = request.form["date"]
+        cursor.execute("UPDATE mdysafe SET name=?, phone=?, location=?,date=?  WHERE id=?", (name, phone, location,date, user_id))
+        conn.commit()
+        conn.close()
+        return redirect(url_for("home"))
+
+    cursor.execute("SELECT * FROM mdysafe WHERE id=?", (user_id,))
+    user = cursor.fetchone()
+    conn.close()
+    return render_template("medit.html", user=user)
+
+# Delete User
+@app.route("/delete/<int:user_id>")
+def delete(user_id):
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM mdysafe WHERE id=?", (user_id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for("home"))
 
 if __name__ == "__main__":
     app.run(debug=True)
