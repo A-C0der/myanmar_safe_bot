@@ -114,6 +114,62 @@ def editmdy(user_id):
     conn.close()
     return render_template("mdy_food_edit.html", user=user)
 
+##miss
+@app.route("/miss")
+def home_miss():
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM dontmiss")
+    users = cursor.fetchall()
+    conn.close()
+    return render_template("miss.html", users=users)
+
+@app.route("/submitmiss", methods=["POST"])
+def submitmiss():
+    name = request.form["name"]
+    location = request.form["location"]
+    status = request.form["status"]
+    donation = request.form["donation"]
+    required = request.form['required']
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO dontmiss (name, location,status, donation,required) VALUES (?, ?, ?,?,? )", (name, location,status, donation,required))
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for("home_miss"))
+
+@app.route("/miss/delete/<int:user_id>")
+def deletemiss(user_id):
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM dontmiss WHERE id=?", (user_id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for("home_miss"))
+
+@app.route("/miss/edit/<int:user_id>", methods=["GET", "POST"])
+def editmiss(user_id):
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+
+    if request.method == "POST":
+        name = request.form["name"]
+        location = request.form["location"]
+        status = request.form["status"]
+        donation = request.form["status"]
+        required = request.form['required']
+        
+        cursor.execute("UPDATE dontmiss SET name=?, location=?, status=?, donation=?,required=?  WHERE id=?", (name, location,status,donation,required,user_id))
+        conn.commit()
+        conn.close()
+        return redirect(url_for("home_miss"))
+
+    cursor.execute("SELECT * FROM dontmiss WHERE id=?", (user_id,))
+    user = cursor.fetchone()
+    conn.close()
+    return render_template("missedit.html", user=user)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
 

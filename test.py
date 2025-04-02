@@ -3,22 +3,23 @@ conn = sql.connect("earthdb.db")
 cursor = conn.cursor()
 
 cursor.execute('''
-    CREATE TABLE IF NOT EXISTS mdydonate (
+    CREATE TABLE IF NOT EXISTS dontmiss (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
-        phone CHAR,
         location CHAR,
-        date CHAR
+        status  CHAR,
+        donation  CHAR,
+        required CHAR
        
     )
 ''')
 
-data = ( "Test1donate", '088484', "mdy",'18.05.2024-2025')
+data = ( "test villege2", 'naer mandaly', "အသေအပျောက်များ",'လှူမဲ့သူများရောက်မလာသေး','ဆေးများများလို')
 
 # Insert query
 cursor.execute('''
-    INSERT INTO mdydonate(name, phone, location,date) 
-    VALUES (?, ?, ?, ?)
+    INSERT INTO dontmiss(name, location, status, donation,required) 
+    VALUES (?, ?, ?, ?, ?)
 ''', data)
 
 # Commit and close the connection

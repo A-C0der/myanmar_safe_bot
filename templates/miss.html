@@ -14,19 +14,28 @@
     </header>
     
    
-    <h2>MDY REsunce ကယ်ဆယ်ရေး လူများအား add ရန်</h2>
-    <form action="/submit" method="POST">
+    <h2>Remind Location</h2>
+    <form action="/submitmiss" method="POST">
         <label for="name" class="form-label">Name:</label>
         <input type="text" id="name" name="name" class="form-contorl" required>
 
-        <label for="phone" class="form-label">Phone:</label>
-        <input type="text" id="phone" name="phone"  class="form-contorl"><br><br>
+      
 
         <labe for="location" class="form-label">Location:</label>
         <input type="text" id="location" name="location" class="form-contorl">
-        <label for="date" class="form-label">Date:</label>
-        <input type="text" id="date" name="date" class="form-contorl"><br><br>
+
+        <label for="status" class="form-label">Status:</label>
+        <input type="text" id="status" name="status"  class="form-contorl"><br><br>
+
+        <label for="donation" class="form-label">Donation:</label>
+        <input type="text" id="donation" name="donation"  class="form-contorl">
+
+
+        <label for="required" class="form-label">Required:</label>
+        <input type="text" id="required" name="required"  class="form-contorl"><br><br>
         <button type="submit" class="btn btn-danger">Submit</button>
+
+
     </form>
    
    
@@ -37,9 +46,10 @@
     <table class="table table-dark">
         <tr>
             <th> NAME</th>
-            <th> Phone</th>
             <th> Location</th>
-            <th> Date</th>
+            <th> Status</th>
+            <th> Donation</th>
+            <th> Required</th>
             <th>Action</th>
         </tr>
         {% for user in users %}
@@ -48,9 +58,10 @@
             <td>{{user[2]}}</td>
             <td>{{user[3]}}</td>
             <td>{{user[4]}}</td>
+            <td>{{user[5]}}</td>
             <td>
-                <a href="/edit/{{ user[0] }}" class="btn btn-primary">Edit</a> |
-                <a href="/delete/{{ user[0] }}"class= "btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                <a href="/miss/edit/{{ user[0] }}" class="btn btn-primary">Edit</a> |
+                <a href="/miss/delete/{{ user[0] }}"class= "btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
             </td>
         </tr>
         {% endfor %}

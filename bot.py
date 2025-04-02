@@ -55,6 +55,13 @@ class BotMyanmar:
     def data_return(self,location):
         conn = sql.connect("/project/myanmar_safe_bot/earthdb.db")
         cursor = conn.cursor()
+        if location=='dontmiss':
+            cursor.execute(f"SELECT name,location,status,donation,required FROM dontmiss")
+            rowd = cursor.fetchall()
+            dtt=[]
+            for dae in rowd:
+                dtt.append(f'Name: {dae[0]}, Location: {dae[1]}, Status: {dae[2]}, Donation: {dae[3]}, Required: {dae[4]}')
+            return dtt
         cursor.execute(f"SELECT name,phone,location,date FROM {location}")
         rows = cursor.fetchall()
         dt =[]
@@ -71,7 +78,12 @@ class BotMyanmar:
 
         if data == "mandalay":
             self.mandalay(chat_id)
+
+        elif data == 'dontmiss':
+            self.send_message(chat_id,self.data_return('dontmiss'))
+
         elif data == "mdy_rescue":
+        
             self.send_message(chat_id,self.data_return('mdysafe'))  # Send "MDY RESCUE" when clicked
         elif data == "mdy_donation":
             self.send_message(chat_id,self.data_return('mdydonate'))
@@ -83,6 +95,7 @@ class BotMyanmar:
 
     def process_updates(self):
         """Continuously check for new messages"""
+        remind=["miss","missed",'remind location','လျှူရန်ကျန်ရှိနေသောနေရာများ','လူရောက်နည်းသောနေရာများ','လျှူကြပါ','လိုအပ်ချက်များသောနေရာ','လိုအပ်နေသောနေရာများ']
         while True:
             updates = self.get_updates()
             if "result" in updates and len(updates["result"]) > 0:
@@ -97,10 +110,13 @@ class BotMyanmar:
                                     [{"text": "မန္တလေး", "callback_data": "mandalay"}],
                                     [{"text": "စစ်ကိုင်း", "callback_data": "sagaing"}],
                                     [{"text": "နေပြည်တော်", "callback_data": "naypyitaw"}],
-                                    [{"text": "ရှမ်း", "callback_data": "shan"}]
+                                    [{"text": "ရှမ်း", "callback_data": "shan"}],
+                                    [{"text": "အလှူရှင်အရောက်နည်းနေသောနေရာများ", "callback_data": "dontmiss"}]
                                 ]
                             })
-                        
+
+                        elif update["message"]["text"] == "dontmiss" or update["message"]["text"] in remind:
+                                 self.send_message(chat_id,self.data_return('dontmiss'))
                         elif update["message"]["text"] == "MDY FOOD" or update["message"]["text"] == "mdy food" or update["message"]["text"]=="MDY DONATE" or update["message"]["text"]=="mdy donate":
                              self.send_message(chat_id,self.data_return('mdydonate'))
 
