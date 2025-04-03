@@ -61,7 +61,7 @@ class BotMyanmar:
             rowd = cursor.fetchall()
             dtt=[]
             for dae in rowd:
-                dtt.append(f'နေရာ/မြို့ရွာ: {dae[0]}\n လိပ်စာ: {dae[1]}\n လက်ရှိအခြေအနေ: {dae[2]}\n အလျှူရှင်များရောက်ရှိမှု: {dae[3]}\n အဓိကလိုအပ်နေသောအရာများ: {dae[4]}\n')
+                dtt.append(f'နေရာ/မြို့ရွာ: {dae[0]}\n လိပ်စာ: {dae[1]}\n လက်ရှိအခြေအနေ: {dae[2]}\n အလှူရှင်များရောက်ရှိမှု: {dae[3]}\n အဓိကလိုအပ်နေသောအရာများ: {dae[4]}\n')
             return dtt
         elif type(location)==list:
           try:
@@ -73,7 +73,7 @@ class BotMyanmar:
                 rows = cursor.fetchall()
                 dt =[]
                 for data in rows:
-                    dt.append(f' အလျှူရှင်အမည်: {data[0]}\n ဖုန်းနံပါတ်: {data[1]}\n လိပ်စာ: {data[2]}, မြို့အမည်: {data[3]}\n တိုင်းအမည်: {data[6]}\n အလျှူအမျိုးအစား: {data[4]}\n အခြားအချက်အလက်: {data[7]}\n အချိန်:{data[8]} \n Link:{data[5]}\n \n')
+                    dt.append(f' အလှူရှင်အမည်: {data[0]}\n ဖုန်းနံပါတ်: {data[1]}\n လိပ်စာ: {data[2]}, မြို့အမည်: {data[3]}\n တိုင်းအမည်: {data[6]}\n အလှူအမျိုးအစား: {data[4]}\n အခြားအချက်အလက်: {data[7]}\n အချိန်:{data[8]} \n Link:{data[5]}\n \n')
                 return dt
           
             elif len(location)==3:
@@ -85,7 +85,7 @@ class BotMyanmar:
                 rows = cursor.fetchall()
                 dt =[]
                 for data in rows:
-                 dt.append(f' အလျှူရှင်အမည်: {data[0]}\n ဖုန်းနံပါတ်: {data[1]}\n လိပ်စာ: {data[2]}, မြို့အမည်: {data[3]}\n တိုင်းအမည်: {data[6]}\n အလျှူအမျိုးအစား: {data[4]}\n အခြားအချက်အလက်: {data[7]}\n အချိန်:{data[8]} \n Link:{data[5]}\n \n')
+                 dt.append(f' အလှူရှင်အမည်: {data[0]}\n ဖုန်းနံပါတ်: {data[1]}\n လိပ်စာ: {data[2]}, မြို့အမည်: {data[3]}\n တိုင်းအမည်: {data[6]}\n အလှူအမျိုးအစား: {data[4]}\n အခြားအချက်အလက်: {data[7]}\n အချိန်:{data[8]} \n Link:{data[5]}\n \n')
                 return dt
             else:
               return "အချက်အလက်မရှိပါ။"
