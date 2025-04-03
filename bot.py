@@ -55,7 +55,7 @@ class BotMyanmar:
     def data_return(self,location):
         conn = sql.connect("/project/myanmar_safe_bot/earthdb.db")
         cursor = conn.cursor()
-        if type(location)==str:
+        if location=='dontmiss':
          if location=='dontmiss':
             cursor.execute(f"SELECT name,location,status,donation,required FROM dontmiss")
             rowd = cursor.fetchall()
@@ -64,21 +64,34 @@ class BotMyanmar:
                 dtt.append(f'နေရာ/မြို့ရွာ: {dae[0]}\n လိပ်စာ: {dae[1]}\n လက်ရှိအခြေအနေ: {dae[2]}\n အလျှူရှင်များရောက်ရှိမှု: {dae[3]}\n အဓိကလိုအပ်နေသောအရာများ: {dae[4]}\n')
             return dtt
         elif type(location)==list:
-          if len(location)==2:
-            cursor.execute(f"SELECT name, phone, location,township,type,link,division,remark,date FROM donation WHERE township={location[1]} AND type={location[2]}")
-            rows = cursor.fetchall()
-            dt =[]
-            for data in rows:
-                dt.append(f' အလျှူရှင်အမည်: {data[0]}\n ဖုန်းနံပါတ်: {data[1]}\n လိပ်စာ: {data[2]}, မြို့အမည်: {data[3]}\n တိုင်းအမည်: {data[6]}\n အလျှူအမျိုးအစား: {data[4]}\n အခြားအချက်အလက်: {data[7]}\n အချိန်:{data[8]} \n Link:{data[5]}\n \n')
-            return dt
+          try:
+            if len(location)==2:
+                cursor.execute(
+    "SELECT name, phone, location, township, type, link, division, remark, date FROM donation WHERE township = ? AND type = ?",
+    (location[0], location[1]))
+
+                rows = cursor.fetchall()
+                dt =[]
+                for data in rows:
+                    dt.append(f' အလျှူရှင်အမည်: {data[0]}\n ဖုန်းနံပါတ်: {data[1]}\n လိပ်စာ: {data[2]}, မြို့အမည်: {data[3]}\n တိုင်းအမည်: {data[6]}\n အလျှူအမျိုးအစား: {data[4]}\n အခြားအချက်အလက်: {data[7]}\n အချိန်:{data[8]} \n Link:{data[5]}\n \n')
+                return dt
           
-          elif len(location)==3:
-            cursor.execute(f"SELECT name, phone, location,township,type,link,division,remark,date FROM donation WHERE township={location[1]} AND type={location[2]} AND division=={location[3]}")
-            rows = cursor.fetchall()
-            dt =[]
-            for data in rows:
-                dt.append(f' အလျှူရှင်အမည်: {data[0]}\n ဖုန်းနံပါတ်: {data[1]}\n လိပ်စာ: {data[2]}, မြို့အမည်: {data[3]}\n တိုင်းအမည်: {data[6]}\n အလျှူအမျိုးအစား: {data[4]}\n အခြားအချက်အလက်: {data[7]}\n အချိန်:{data[8]} \n Link:{data[5]}\n \n')
-            return dt
+            elif len(location)==3:
+                cursor.execute(
+    "SELECT name, phone, location, township, type, link, division, remark, date FROM donation WHERE township = ? AND type = ? AND division = ?",
+    (location[0], location[1], location[2]) 
+)
+
+                rows = cursor.fetchall()
+                dt =[]
+                for data in rows:
+                 dt.append(f' အလျှူရှင်အမည်: {data[0]}\n ဖုန်းနံပါတ်: {data[1]}\n လိပ်စာ: {data[2]}, မြို့အမည်: {data[3]}\n တိုင်းအမည်: {data[6]}\n အလျှူအမျိုးအစား: {data[4]}\n အခြားအချက်အလက်: {data[7]}\n အချိန်:{data[8]} \n Link:{data[5]}\n \n')
+                return dt
+            else:
+              return "အချက်အလက်မရှိပါ။"
+          except sql.OperationalError:
+            return "အချက်အလက်မရှိပါ။"
+   
         
            
     def handle_callback(self, callback_query):
