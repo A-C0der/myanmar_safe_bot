@@ -1,9 +1,7 @@
-text = ['1', '2', '3']
-data = {'chat_id': 134}
-
-for te in text:
-    data['text'] = te
-    print({'text': data['text']})  # Only printing the updated text
+a= "hello arkar kyaw"
+b=a.split()
+print(len(b))
+print(b[ :2])
 
         
         

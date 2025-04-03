@@ -14,7 +14,7 @@
     </header>
     
    
-    <h2>MDY Donation place</h2>
+    <h2>Donation place Added</h2>
     <form action="/submitmd" method="POST">
         <label for="name" class="form-label">Name:</label>
         <input type="text" id="name" name="name" class="form-contorl" required>
@@ -22,8 +22,26 @@
         <label for="phone" class="form-label">Phone:</label>
         <input type="text" id="phone" name="phone"  class="form-contorl"><br><br>
 
-        <labe for="location" class="form-label">Location:</label>
-        <input type="text" id="location" name="location" class="form-contorl">
+        <label for="location" class="form-label">Location:</label>
+        <input type="text" id="location" name="location" class="form-contorl"><br><br>
+
+        <label for="township" class="form-label">Township:</label>
+        <input type="text" id="township" name="township" class="form-contorl">
+
+        <label for="type" class="form-label">Type:</label>
+        <input type="text" id="type" name="type" class="form-contorl">
+        <br><br>
+
+        <label for="link" class="form-label">Link:</label>
+        <input type="text" id="link" name="link" class="form-contorl">
+
+        <label for="division" class="form-label">Division:</label>
+        <input type="text" id="division" name="division" class="form-contorl">
+            
+        <br><br>
+        <labe for="remark" class="form-label">Remark:</label>
+        <input type="text" id="remark" name="remark" class="form-contorl">
+
         <label for="date" class="form-label">Date:</label>
         <input type="text" id="date" name="date" class="form-contorl"><br><br>
         <button type="submit" class="btn btn-danger">Submit</button>
@@ -39,8 +57,13 @@
             <th> NAME</th>
             <th> Phone</th>
             <th> Location</th>
-            <th> Date</th>
-            <th>Action</th>
+            <th> Township</th>
+            <th> Type</th>
+            <th> Link</th>
+            <th> Division</th>
+            <th> Remark </th>
+            <th> Date </th>
+            <th> Action</th>
         </tr>
         {% for user in users %}
         <tr>
@@ -48,6 +71,11 @@
             <td>{{user[2]}}</td>
             <td>{{user[3]}}</td>
             <td>{{user[4]}}</td>
+            <td>{{user[5]}}</td>
+            <td>{{user[6]}}</td>
+            <td>{{user[7]}}</td>
+            <td>{{user[8]}}</td>
+            <td>{{user[9]}}</td>
             <td>
                 <a href="/mdydonate/edit/{{ user[0] }}" class="btn btn-primary">Edit</a> |
                 <a href="/mdydonate/delete/{{ user[0] }}"class= "btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a>

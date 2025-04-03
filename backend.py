@@ -66,7 +66,7 @@ def delete(user_id):
 def home_mdy():
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM mdydonate")
+    cursor.execute("SELECT * FROM donation")
     users = cursor.fetchall()
     conn.close()
     return render_template("mdy_food.html", users=users)
@@ -76,10 +76,15 @@ def submitmd():
     name = request.form["name"]
     phone = request.form["phone"]
     location = request.form["location"]
+    township = request.form["township"]
+    type = request.form["type"]
+    link = request.form["link"]
+    division = request.form["division"]
+    remark = request.form["remark"]
     date = request.form["date"]
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO mdydonate (name, phone, location,date) VALUES (?, ?, ?,?)", (name, phone, location,date))
+    cursor.execute("INSERT INTO donation (name, phone, location,township,type,link,division,remark,date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (name, phone, location,township,type,link,division,remark,date))
     conn.commit()
     conn.close()
 
@@ -89,7 +94,7 @@ def submitmd():
 def deletemdy(user_id):
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM mdydonate WHERE id=?", (user_id,))
+    cursor.execute("DELETE FROM donation WHERE id=?", (user_id,))
     conn.commit()
     conn.close()
     return redirect(url_for("home_mdy"))
@@ -103,13 +108,18 @@ def editmdy(user_id):
         name = request.form["name"]
         phone = request.form["phone"]
         location = request.form["location"]
+        township = request.form["township"]
+        type = request.form["type"]
+        link = request.form["link"]
+        division = request.form["division"]
+        remark = request.form["remark"]
         date = request.form["date"]
-        cursor.execute("UPDATE mdydonate SET name=?, phone=?, location=?,date=?  WHERE id=?", (name, phone, location,date, user_id))
+        cursor.execute("UPDATE donation SET name=?, phone=?, location=?,township=?, type=?, link=?, division=?,remark=?,date=?  WHERE id=?", (name, phone, location,township,type,link,division,remark,date,user_id))
         conn.commit()
         conn.close()
         return redirect(url_for("home_mdy"))
 
-    cursor.execute("SELECT * FROM mdydonate WHERE id=?", (user_id,))
+    cursor.execute("SELECT * FROM donation WHERE id=?", (user_id,))
     user = cursor.fetchone()
     conn.close()
     return render_template("mdy_food_edit.html", user=user)

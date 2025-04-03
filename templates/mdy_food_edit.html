@@ -9,16 +9,30 @@
     <h2>MDY FOOD DONATION Place အလျှူတန်းနေရာများအားည့်ရန် </h2>
     <form action="/mdydonate/edit/{{ user[0] }}" method="POST">
         <label>Name:</label>
-        <input type="text" name="name" value="{{ user[1] }}" required><br><br>
+        <input type="text" name="name" value="{{ user[1] }}" required>
 
         <label>Phone:</label>
-        <input type="text" name="phone" value="{{ user[2] }}" required><br><br>
+        <input type="text" name="phone" value="{{ user[2] }}" ><br><br>
 
         <label>Location:</label>
-        <input type="text" name="location" value="{{ user[3] }}" required><br><br>
+        <input type="text" name="location" value="{{ user[3] }}">
 
+        <label>Township:</label>
+        <input type="text" name="township" value="{{ user[4] }}" ><br><br>
+
+        <label>Type:</label>
+        <input type="text" name="type" value="{{ user[5] }}" >
+
+        <label>Link:</label>
+        <input type="text" name="link" value="{{ user[6] }}"><br><br>
+
+        <label>Division:</label>
+        <input type="text" name="division" value="{{ user[7] }}" >
+
+        <label>Remark:</label>
+        <input type="text" name="remark" value="{{ user[8] }}"><br><br>
         <label>Date:</label>
-        <input type="text" name="date" value="{{ user[4] }}" required><br><br>
+        <input type="text" name="date" value="{{ user[9] }}">
 
         <button type="submit">Update</button>
     </form>
