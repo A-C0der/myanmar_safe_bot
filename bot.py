@@ -5,7 +5,7 @@ import pandas as pd
 import sqlite3 as sql
 class BotMyanmar:
     def __init__(self):
-        self.token = "7586848193:AAEFsTAZwvua5YQdziZuSF174EMEQzyzkrc"  # Replace with your bot token
+        self.token = ""  # Replace with your bot token
         self.url = f"https://api.telegram.org/bot{self.token}"
         self.last_update_id = None  # Track last processed update
 
